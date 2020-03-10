@@ -27,9 +27,9 @@ app.get("/api/notes", (req, res) => {
 	get.getAll(req, res);
 });
 
-// app.get("/api/notes/:id", (req, res) => {
-// 	get.getByID(req, res);
-// });
+app.get("/api/notes/:id", (req, res) => {
+	get.getByID(req, res);
+});
 
 app.post("/api/notes", urlencodedParser, (req, res) => {
 	add.create(req, res);

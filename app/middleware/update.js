@@ -16,10 +16,10 @@ module.exports.up = (req, res) => {
 		WHERE id = ?`;
 		db.run( sql, params, function (err, result) {
 			if (err){
-				res.status(401).json({"error": err});
+				res.status(403).json({"error": err});
 				return;
 			}
-				res.status(201).json({
+				res.status(200).json({
 				message: "success",
 				data: body,
 				changes: this.changes

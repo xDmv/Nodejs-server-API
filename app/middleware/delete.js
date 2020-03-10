@@ -15,7 +15,7 @@ module.exports.deleteById = (req, res) => {
 					res.status(401).json({"error": res.message})
 					return;
 				}
-				res.status(201).json({"message":"deleted", changes: this.changes})
+				res.status(200).json({"message":"deleted", changes: this.changes})
 		});
 	}
 }
@@ -30,6 +30,6 @@ module.exports.deleteAll = (req, res) => {
 				res.status(401).json({"error": res.message})
 				return;
 			}
-			res.status(201).json({"message":"deleted All item"})
+			res.status(200).json({"message":"deleted All item"})
 	});
 }

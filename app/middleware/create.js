@@ -22,7 +22,7 @@ module.exports.create = (reg, res) => {
 						res.status(401).json({"error": err.message})
 						return;
 					}
-					res.status(201).json({ "message": "success", "id" : this.lastID });
+					res.status(200).json({ "message": "success", "id" : this.lastID });
 				}
 			);
 		}
@@ -31,6 +31,6 @@ module.exports.create = (reg, res) => {
 		}
 	}
 	catch (err) { 
-		return res.status(400).json({ error: err.message });
+		return res.status(403).json({ error: err.message });
 	}
 }
