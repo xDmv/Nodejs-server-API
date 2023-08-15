@@ -4,19 +4,34 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser   = require('body-parser');
+const multer = require('multer');
+const cors = require('cors')
 
 const get = require('./app/middleware/get');
 const add = require('./app/middleware/create');
 const update = require('./app/middleware/update');
 const del = require('./app/middleware/delete');
 
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, './uploads/files/');
+	},
+	filename: function (req, file, cb) {
+		cb(null, Date.now() + path.extname(file.originalname));
+	}
+});
+
+const upload = multer({ storage: storage });
+
 const app = express();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json());
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/notes/test', (req,res)=>{
-	res.status(200).json({'status API':  true, 'version': '1.0.0'})
+	res.status(200).json({'status API':  true, 'version': '1.0.1'})
 });
 
 app.get("/api", function (req, res) {
@@ -37,6 +52,22 @@ app.post("/api/notes", urlencodedParser, (req, res) => {
 
 app.put("/api/notes/:id", urlencodedParser, (req, res) => {
 	update.up(req, res);
+});
+
+app.put("/api/upload/:id", upload.single('avatar'), (req, res) => {
+	const user = JSON.parse(req.body.user);
+	user.avatar = req.file.path;
+	console.warn('user:', user);
+	console.warn('user.avatar: ', req.file.path);
+	console.warn('params', req.params);
+
+	return res.status(200).json({
+		message: "success",
+		data: {
+			...user
+		},
+		changes: 'User updated!'
+	})
 });
 
 app.delete("/api/notes/delAll", (req, res) => {
